@@ -38,6 +38,11 @@ function undo_changes {
 		echo -e "${RED}- zsh-syntax-highlighting plugin might've been installed or altered. Consider removing or checking it manually.${NC}"
 	fi
 
+	# Check if Zsh was installed by this script
+	if ! command -v zsh &>/dev/null; then
+		echo -e "${RED}- Zsh is installed. Consider removing it if you encounter issues.${NC}"
+	fi
+
 	echo -e "${RED}Consider reviewing the aforementioned items and deciding on manual removal or adjustments.${NC}"
 }
 
@@ -97,13 +102,34 @@ else
 	echo "Git is already installed."
 fi
 
+# Check if Zsh is installed
+if ! command -v zsh &>/dev/null; then
+	echo "Installing Zsh..."
+	if [[ "$(uname)" == "Darwin" ]]; then
+		brew install zsh
+	elif [[ -f "/etc/debian_version" ]]; then
+		sudo apt-get update
+		sudo apt-get install -y zsh
+	elif [[ -f "/etc/fedora-release" ]]; then
+		sudo dnf install -y zsh
+	elif [[ -f "/etc/arch-release" ]]; then
+		sudo pacman -Sy zsh
+	else
+		echo "Unsupported Linux distribution. Please install Zsh manually and resume this process."
+		exit 1
+	fi
+	echo "Zsh installed successfully."
+else
+	echo "Zsh is already installed."
+fi
+
 # Fetch necessary resources
 echo "Fetching stardust... I mean, resources... ✨"
 
 # Check if Oh My Zsh is installed
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
 	echo "Installing Oh My Zsh..."
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	RUNZSH="no" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	echo "Oh My Zsh installed successfully."
 else
 	echo "Oh My Zsh is already installed."
