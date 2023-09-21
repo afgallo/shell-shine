@@ -18,13 +18,13 @@ All with a single, sparkling script.
 1. Clone this repository:
 
    ```bash
-   git clone [your-repository-link]
+   git clone https://github.com/afgallo/shell-shine.git
    ```
 
 2. Navigate to the repository's directory:
 
    ```bash
-   cd [your-repository-name]
+   cd shell-shine
    ```
 
 3. Give the script execute permissions:
