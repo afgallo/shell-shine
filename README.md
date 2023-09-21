@@ -1,7 +1,3 @@
-Certainly! Here's a fun README for your `ShellShine` script:
-
----
-
 # ShellShine ✨
 
 Give your terminal the makeover it deserves! Let's make your shell shine bright like a diamond (or maybe like a very advanced piece of technology). 🌌
