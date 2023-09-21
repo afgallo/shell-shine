@@ -49,12 +49,6 @@ function undo_changes {
 # Trap any errors and undo changes
 trap 'undo_changes' ERR
 
-apply_changes() {
-	echo "Applying changes by sourcing ~/.zshrc..."
-	source "$HOME/.zshrc"
-	echo "Changes applied successfully."
-}
-
 # Greet the user
 echo "Welcome to ShellShine! 🌟"
 echo "Let's give your terminal the sparkle it deserves!"
@@ -211,10 +205,7 @@ if [[ -f "$HOME/.zshrc.bak" ]]; then
 	rm "$HOME/.zshrc.bak"
 fi
 
-# Apply changes
-apply_changes
-
-echo "All set! Your terminal is now shining bright like a diamond! 💎"
+echo "Your terminal is now shining bright like a diamond! 💎 Please restart your terminal or source your ~/.zshrc for the changes to take effect."
 echo "Don't forget to customize your Powerlevel10k prompt by running 'p10k configure'."
 
 # Exit with success
