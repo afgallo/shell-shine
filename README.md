@@ -30,7 +30,7 @@ All with a single, sparkling script.
 3. Give the script execute permissions:
 
    ```bash
-   chmod +x shellshine.sh
+   chmod +x shell-shine.sh
    ```
 
 4. Run the script:
