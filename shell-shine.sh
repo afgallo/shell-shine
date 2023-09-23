@@ -97,7 +97,6 @@ fi
 
 # Determine if running Linux and install Homebrew
 if [[ "$(uname)" == "Linux" ]]; then
-	sudo apt-get update
 	if [ ! -x brew ]; then
 		curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | NONINTERACTIVE=1 bash
 		echo "Homebrew installed successfully."
