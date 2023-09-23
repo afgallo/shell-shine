@@ -53,8 +53,12 @@ else
 fi
 
 echo "Installing dev tools..."
-brew install awscli tmux jq fzf htop mongosh neovim python3 ruby sqlite tree terraform
+brew install awscli tmux jq htop mongosh neovim python3 ruby sqlite tree terraform
 echo "dev tools installed successfully."
+
+# Install fzf
+brew install fzf
+$(brew --prefix)/opt/fzf/install
 
 # Install nvm using brew
 brew install nvm
