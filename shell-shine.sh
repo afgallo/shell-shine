@@ -49,13 +49,33 @@ function undo_changes {
 # Trap any errors and undo changes
 trap 'undo_changes' ERR
 
+# Go Home
+pushd "$HOME"
+
 # Greet the user
 echo "Welcome to ShellShine! 🌟"
 echo "Let's give your terminal the sparkle it deserves!"
 
+# Create .ssh key
+if [ ! -d ~/.ssh ]; then
+	echo "Creating a new directory to hold ssh keys..."
+	mkdir ~/.ssh
+	chmod 700 .ssh
+fi
+
+if [ ! -f ~/.ssh/id_rsa ]; then
+	echo "Creating a new ssh key..."
+	ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -q -N ""
+fi
+
+# Add github.com and bitbucket.com keys to known hosts
+echo "Adding github.com and bitbucket.org to known_hosts..."
+ssh-keyscan github.com ~/.ssh/known_hosts
+ssh-keyscan bitbucket.org ~/.ssh/known_hosts
+
 # Determine if running macOS
 if [[ "$(uname)" == "Darwin" ]]; then
-	# Check if Homebrew is installed
+	# Install Homebrew if not already present
 	if ! command -v brew &>/dev/null; then
 		echo "Homebrew is not installed. Installing now..."
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -75,43 +95,35 @@ if [[ "$(uname)" == "Darwin" ]]; then
 	fi
 fi
 
-# Install Git if not already present
-if ! command -v git &>/dev/null; then
-	echo "Installing Git..."
-	if [[ "$(uname)" == "Darwin" ]]; then
-		brew install git
-	elif [[ -f "/etc/debian_version" ]]; then
-		sudo apt-get update
-		sudo apt-get install -y git
-	elif [[ -f "/etc/fedora-release" ]]; then
-		sudo dnf install -y git
-	elif [[ -f "/etc/arch-release" ]]; then
-		sudo pacman -Sy git
+# Determine if running Linux and install Homebrew
+if [[ "$(uname)" == "Linux" ]]; then
+	sudo apt-get update
+	if [ ! -x brew ]; then
+		curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | NONINTERACTIVE=1 bash
+		echo "Homebrew installed successfully."
 	else
-		echo "Unsupported Linux distribution. Please install Git manually and resume this process."
-		exit 1
+		echo "Homebrew is already installed."
 	fi
-	echo "Git installed successfully."
-else
-	echo "Git is already installed."
 fi
+
+echo "Installing Git..."
+brew install git
+
+echo "Git installed successfully."
+
+echo "Installing dev tools..."
+brew install curl awscli tmux jq fzf htop mongosh neovim python3 ruby sqlite tree terraform
+echo "dev tools installed successfully."
+
+# Install nvm
+echo "Installing nvm..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+echo "nvm installed successfully."
 
 # Check if Zsh is installed
 if ! command -v zsh &>/dev/null; then
 	echo "Installing Zsh..."
-	if [[ "$(uname)" == "Darwin" ]]; then
-		brew install zsh
-	elif [[ -f "/etc/debian_version" ]]; then
-		sudo apt-get update
-		sudo apt-get install -y zsh
-	elif [[ -f "/etc/fedora-release" ]]; then
-		sudo dnf install -y zsh
-	elif [[ -f "/etc/arch-release" ]]; then
-		sudo pacman -Sy zsh
-	else
-		echo "Unsupported Linux distribution. Please install Zsh manually and resume this process."
-		exit 1
-	fi
+	brew install zsh
 	echo "Zsh installed successfully."
 else
 	echo "Zsh is already installed."
@@ -203,6 +215,34 @@ fi
 # Clean up sed backups if they exist
 if [[ -f "$HOME/.zshrc.bak" ]]; then
 	rm "$HOME/.zshrc.bak"
+fi
+
+# Install Starship prompt if not already present
+if ! command -v starship &>/dev/null; then
+	echo "Installing Starship prompt..."
+
+	# Install using the provided script from Starship's website
+	curl -sS https://starship.rs/install.sh | sh
+
+	echo "Starship prompt installed successfully."
+else
+	echo "Starship prompt is already installed."
+fi
+
+# Check if Starship is initialized in ~/.zshrc
+if ! grep -q "eval \"\$(starship init zsh)\"" "$HOME/.zshrc"; then
+	echo "Initializing Starship in ~/.zshrc..."
+	echo -e "\n# Starship prompt configuration\neval \"\$(starship init zsh)\"" >>"$HOME/.zshrc"
+else
+	echo "Starship prompt is already initialized in ~/.zshrc."
+fi
+
+# Get dotfiles
+if [ ! -d "$HOME/.dotfiles" ]; then
+	git clone --bare git@github.com:afgallo/dotfiles.git "$HOME/.dotfiles"
+	pushd ~/.dotfiles
+	./bootstrap.sh
+	popd
 fi
 
 echo "Your terminal is now shining bright like a diamond! 💎 Please restart your terminal or source your ~/.zshrc for the changes to take effect."
