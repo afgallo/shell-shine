@@ -79,6 +79,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
 	if ! command -v brew &>/dev/null; then
 		echo "Homebrew is not installed. Installing now..."
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		# Add Homebrew's bin directory to the current PATH
+		export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 		echo "Homebrew installed successfully."
 	else
 		echo "Homebrew is already installed."
@@ -97,18 +99,15 @@ fi
 
 # Determine if running Linux and install Homebrew
 if [[ "$(uname)" == "Linux" ]]; then
-	if [ ! -x brew ]; then
+	if ! command -v brew &>/dev/null; then
 		curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | NONINTERACTIVE=1 bash
+		# Add Homebrew's bin directory to the current PATH
+		export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 		echo "Homebrew installed successfully."
 	else
 		echo "Homebrew is already installed."
 	fi
 fi
-
-echo "Installing Git..."
-brew install git
-
-echo "Git installed successfully."
 
 echo "Installing dev tools..."
 brew install curl awscli tmux jq fzf htop mongosh neovim python3 ruby sqlite tree terraform
