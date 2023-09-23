@@ -63,11 +63,6 @@ if [ ! -d ~/.ssh ]; then
 	chmod 700 .ssh
 fi
 
-if [ ! -f ~/.ssh/id_rsa ]; then
-	echo "Creating a new ssh key..."
-	ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -q -N ""
-fi
-
 # Add github.com and bitbucket.com keys to known hosts
 echo "Adding github.com and bitbucket.org to known_hosts..."
 ssh-keyscan github.com ~/.ssh/known_hosts
@@ -235,12 +230,21 @@ else
 	echo "Starship prompt is already initialized in ~/.zshrc."
 fi
 
+# Go Home
+pushd "$HOME"
+
 # Get dotfiles
 if [ ! -d "$HOME/.dotfiles" ]; then
 	git clone --bare git@github.com:afgallo/dotfiles.git "$HOME/.dotfiles"
 	pushd ~/.dotfiles
 	./bootstrap.sh
 	popd
+fi
+
+# Create a new ssh key for convenience
+if [ ! -f ~/.ssh/id_rsa ]; then
+	echo "Creating a new ssh key..."
+	ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -q -N ""
 fi
 
 echo "Your terminal is now shining bright like a diamond! 💎 Please restart your terminal or source your ~/.zshrc for the changes to take effect."
