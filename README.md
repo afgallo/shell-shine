@@ -29,7 +29,7 @@ All with a single, sparkling script.
 
 3. Run the script:
    ```bash
-   ./shellshine.sh
+   ./shell-shine.sh
    ```
 
 Follow the on-screen prompts and witness the magic unfold! 🪄✨
