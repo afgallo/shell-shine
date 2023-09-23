@@ -230,15 +230,9 @@ else
 	echo "Starship prompt is already initialized in ~/.zshrc."
 fi
 
-# Go Home
-pushd "$HOME"
-
 # Get dotfiles
 if [ ! -d "$HOME/.dotfiles" ]; then
-	git clone --bare git@github.com:afgallo/dotfiles.git "$HOME/.dotfiles"
-	pushd ~/.dotfiles
-	./bootstrap.sh
-	popd
+	curl https://raw.githubusercontent.com/afgallo/dotfiles/main/bootstrap.sh | bash -s
 fi
 
 # Create a new ssh key for convenience
@@ -251,4 +245,5 @@ echo "Your terminal is now shining bright like a diamond! 💎 Please restart yo
 echo "Don't forget to customize your Powerlevel10k prompt by running 'p10k configure'."
 
 # Exit with success
+popd
 exit 0
