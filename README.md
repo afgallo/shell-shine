@@ -2,13 +2,14 @@
 
 Give your terminal the makeover it deserves! Let's make your shell shine bright like a diamond (or maybe like a very advanced piece of technology). 🌌
 
+DISCLAIMER: Only meant to be used with Ubuntu, run at your own risk!
+
 ## Overview 🚀
 
 With `ShellShine`, you can:
 
-- Install essential terminal tools like Homebrew (macOS only), Git, and iTerm2 (macOS only).
+- Install essential terminal tools like brew, git, fzf, tree, etc.
 - Set up Oh My Zsh for a richer shell experience.
-- Add the mesmerizing Powerlevel10k theme.
 - And a sprinkle of magical plugins to boost your terminal productivity!
 
 All with a single, sparkling script.
@@ -36,11 +37,7 @@ Follow the on-screen prompts and witness the magic unfold! 🪄✨
 
 ## Potential Issues 🚧
 
-Hey, even magic can run into hiccups! If you encounter an issue during the installation process, `ShellShine` will notify you about the changes and suggest manual interventions. It's always good to keep an eye on what's happening, just in case!
-
-## Contribute 🤝
-
-Did you find a spell that can enhance this script? Feel free to contribute! Open an issue or send a pull request.
+Hey, even magic can run into hiccups! If you encounter an issue during the installation process, `ShellShine` will notify you about it so you can review if any changes were made to your environment.
 
 ## Final Words 🌠
 
