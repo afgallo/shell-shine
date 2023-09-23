@@ -221,8 +221,8 @@ if ! command -v starship &>/dev/null; then
 	echo "Installing Starship prompt..."
 
 	# Install using the provided script from Starship's website
-	curl -sS https://starship.rs/install.sh | sh
-
+	#	curl -sS https://starship.rs/install.sh | sh
+	brew install starship
 	echo "Starship prompt installed successfully."
 else
 	echo "Starship prompt is already installed."
