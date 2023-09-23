@@ -27,13 +27,7 @@ All with a single, sparkling script.
    cd shell-shine
    ```
 
-3. Give the script execute permissions:
-
-   ```bash
-   chmod +x shell-shine.sh
-   ```
-
-4. Run the script:
+3. Run the script:
    ```bash
    ./shellshine.sh
    ```
