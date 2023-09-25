@@ -38,7 +38,7 @@ if ! command -v brew &>/dev/null; then
 
 	# Install dependencies for Homebrew
 	sudo apt-get update
-	sudo apt-get install -y build-essential curl file git
+	sudo apt-get install -y build-essential curl git
 
 	# Install Homebrew
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
