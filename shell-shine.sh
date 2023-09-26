@@ -52,24 +52,24 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
 	echo "Installing Oh My Zsh plugins..."
 	# Install zsh-autosuggestions
 	if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+		git clone "https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 	fi
 
 	# Install zsh-syntax-highlighting
 	if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
-		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+		git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 	fi
 else
 	echo "oh-my-zsh is not installed. Skipping plugin installation."
 fi
 
 # Install Starship
-if ! command -v starship &>/dev/null; then
-	echo "Installing starship..."
-	curl -sS https://starship.rs/install.sh | sh
-else
-	echo "Starship is already installed."
-fi
+#if ! command -v starship &>/dev/null; then
+#	echo "Installing starship..."
+#	curl -sS https://starship.rs/install.sh | sh
+#else
+#	echo "Starship is already installed."
+#fi
 
 # Install powerlevel10k (optional)
 ./powerlevel10k_install.sh
@@ -151,5 +151,7 @@ if [ ! -f "${SONOKAI_DIR}/sonokai.vim" ]; then
 else
 	echo "Sonokai theme is already installed."
 fi
+
+sudo timedatectl set-timezone Australia/NSW
 
 echo "ShellShine setup complete! Enjoy! 🚀"
