@@ -14,9 +14,9 @@ if ! id "$USERNAME" &>/dev/null; then
 	sudo usermod -aG sudo $USERNAME
 
 	# Copy the shell-shine.sh script to the user's home directory and set correct permissions
-	sudo cp "$HOME/shell-shine.sh" "/home/$USERNAME/shell-shine.sh"
-	sudo chown $USERNAME:$USERNAME "/home/$USERNAME/shell-shine.sh"
-	sudo chmod +x "/home/$USERNAME/shell-shine.sh"
+	sudo cp -a "$HOME/shell-shine/." "/home/$USERNAME/shell-shine/"
+	sudo chown $USERNAME:$USERNAME "/home/$USERNAME/shell-shine/shell-shine.sh"
+	sudo chmod +x "/home/$USERNAME/shell-shine/shell-shine.sh"
 
 	echo "Switching to user '$USERNAME'. Once you are the '$USERNAME' user, you can re-run this script to continue the setup."
 	su - $USERNAME
