@@ -1,136 +1,114 @@
 #!/bin/bash
-set -e # Exit the script if any command fails
+set -e
 
-# ANSI Escape Codes for colors
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-function undo_changes {
-	echo -e "${RED}An error occurred during the setup process...${NC}"
-	echo -e "${RED}Consider reviewing the changes made by the script and deciding on manual removal or adjustments.${NC}"
-}
-
-# Trap any errors and undo changes
-trap 'undo_changes' ERR
-
-# Go Home
-pushd "$HOME"
-
-# Greet the user
 echo "Welcome to ShellShine! 🌟"
-echo "Let's give your terminal the sparkle it deserves!"
 
-# Create .ssh key
-if [ ! -d ~/.ssh ]; then
-	echo "Creating a new directory to hold ssh keys..."
-	mkdir ~/.ssh
-	chmod 700 .ssh
-fi
+# Ask user for a desired username
+read -p "Enter the desired username so we don't run as sudo (default: afgallo): " USERNAME
+USERNAME=${USERNAME:-afgallo}
 
-# Add github.com and bitbucket.com keys to known hosts
-echo "Adding github.com and bitbucket.org to known_hosts..."
-ssh-keyscan github.com ~/.ssh/known_hosts
-ssh-keyscan bitbucket.org ~/.ssh/known_hosts
+# 1. Create a new user if it doesn't exist (so we don't use sudo)
+if ! id "$USERNAME" &>/dev/null; then
+    echo "User '$USERNAME' doesn't exist. Creating now..."
+    sudo adduser $USERNAME
+    sudo usermod -aG sudo $USERNAME
 
-# Check if Homebrew is installed, if not install it.
-if ! command -v brew &>/dev/null; then
-	echo "Installing Homebrew..."
+    # Copy the shell-shine.sh script to the user's home directory and set correct permissions
+    sudo cp "$HOME/shell-shine.sh" "/home/$USERNAME/shell-shine.sh"
+    sudo chown $USERNAME:$USERNAME "/home/$USERNAME/shell-shine.sh"
+    sudo chmod +x "/home/$USERNAME/shell-shine.sh"
 
-	# Install dependencies for Homebrew
-	sudo apt-get update
-	sudo apt-get install -y build-essential curl git
-
-	# Install Homebrew
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-	# Ensure Homebrew is added to the PATH for the current session and future sessions
-	echo eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >>~/.profile
-	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-	echo "Homebrew installed successfully."
+    echo "Switching to user '$USERNAME'. Once you are the '$USERNAME' user, you can re-run this script to continue the setup."
+    su - $USERNAME
+    exit 0
 else
-	echo "Homebrew is already installed."
+    echo "User '$USERNAME' already exists. Continuing ..."
 fi
 
-echo "Installing dev tools..."
-brew install awscli tmux jq htop mongosh neovim python3 ruby sqlite tree terraform
-echo "dev tools installed successfully."
+# 2. Update and upgrade the system
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install build-essential
 
-# Install fzf
-brew install fzf
-$(brew --prefix)/opt/fzf/install
+# 3. Install and configure packages
 
-# Install nvm using brew
-brew install nvm
-# Initialize nvm and add to PATH for the current shell
-export NVM_DIR="$HOME/.nvm"
-[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && \. "$(brew --prefix)/opt/nvm/nvm.sh"
-# Install Node LTS
-nvm install --lts
-
-# Check if Zsh is installed
+# Install zsh
 if ! command -v zsh &>/dev/null; then
-	echo "Installing Zsh..."
-	brew install zsh
-	echo "Zsh installed successfully."
+    echo "Installing zsh..."
+    sudo apt install -y zsh
 else
-	echo "Zsh is already installed."
+    echo "Zsh is already installed."
 fi
 
-# Check if Oh My Zsh is installed
-if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-	echo "Installing Oh My Zsh..."
-	RUNZSH="no" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-	echo "Oh My Zsh installed successfully."
+# Install oh-my-zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
-	echo "Oh My Zsh is already installed."
+    echo "Oh My Zsh is already installed."
 fi
 
-# Check and set ZSH_CUSTOM if not set
-if [[ -z "$ZSH_CUSTOM" ]]; then
-	ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
-fi
-
-# Check if zsh-autosuggestions plugin is installed
-if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
-	echo "Installing zsh-autosuggestions plugin..."
-	git clone "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-	echo "zsh-autosuggestions plugin installed successfully."
+# Install git
+if ! command -v git &>/dev/null; then
+    echo "Installing git..."
+    sudo apt install -y git
 else
-	echo "zsh-autosuggestions plugin is already installed."
+    echo "Git is already installed."
 fi
 
-# Check if zsh-syntax-highlighting plugin is installed
-if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
-	echo "Installing zsh-syntax-highlighting plugin..."
-	git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-	echo "zsh-syntax-highlighting plugin installed successfully."
+# Install tmux
+if ! command -v tmux &>/dev/null; then
+    echo "Installing tmux..."
+    sudo apt install -y tmux
 else
-	echo "zsh-syntax-highlighting plugin is already installed."
+    echo "Tmux is already installed."
 fi
 
-# Install Starship prompt if not already present
-if ! command -v starship &>/dev/null; then
-	echo "Installing Starship prompt..."
-	brew install starship
-	echo "Starship prompt installed successfully."
+# Install neovim
+if ! command -v nvim &>/dev/null; then
+    echo "Installing neovim..."
+    ./neovim-install.sh
 else
-	echo "Starship prompt is already installed."
+    echo "Neovim is already installed."
 fi
 
-# Get dotfiles
-if [ ! -d "$HOME/.dotfiles" ]; then
-	curl https://raw.githubusercontent.com/afgallo/dotfiles/main/bootstrap.sh | bash -s
+# Install Docker
+if ! command -v docker &>/dev/null; then
+    echo "Installing Docker from official repositories..."
+    chmod +x ./docker-install.sh
+    ./docker-install.sh $USERNAME
+else
+    echo "Docker is already installed."
 fi
 
-# Create a new ssh key for convenience
-if [ ! -f ~/.ssh/id_rsa ]; then
-	echo "Creating a new ssh key..."
-	ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -q -N ""
+# Install nvm
+if [ ! -d "$NVM_DIR" ]; then
+    echo "Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+else
+    echo "Nvm is already installed."
 fi
 
-echo "Your terminal is now shining bright like a diamond! 💎 Please restart your terminal or source your ~/.zshrc for the changes to take effect."
+# 4. Setup Astronvim
+# Replace the below path with the actual path if different
+if [ ! -d "$HOME/.config/nvim/lua/user" ]; then
+    echo "Setting up Astronvim..."
+    git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+    git clone git@github.com:afgallo/astronvim_config.git ~/.config/nvim/lua/user
+else
+    echo "Astronvim is already set up."
+fi
 
-# Exit with success
-popd
-exit 0
+# 5. Install sonokai theme
+# Sonokai Theme Installation
+SONOKAI_DIR="$HOME/.vim/colors"
+if [ ! -f "${SONOKAI_DIR}/sonokai.vim" ]; then
+    ./sonokai-theme-install.sh
+else
+    echo "Sonokai theme is already installed."
+fi
+
+echo "ShellShine setup complete! Enjoy! 🚀"
+
