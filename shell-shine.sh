@@ -145,7 +145,7 @@ fi
 if [ ! -d "$HOME/.config/nvim/lua/user" ]; then
 	print_message "Setting up Astronvim..."
 	git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-	git clone git@github.com:afgallo/astronvim_config.git ~/.config/nvim/lua/user
+	git clone https://github.com/afgallo/astronvim_config.git ~/.config/nvim/lua/user
 else
 	print_message "Astronvim is already set up."
 fi

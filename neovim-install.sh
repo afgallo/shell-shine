@@ -2,7 +2,7 @@
 set -e
 
 # Install FUSE first
-sudo apt-get install fuse
+sudo apt-get install fuse -y
 
 # Download the AppImage
 curl -Lo /tmp/nvim.appimage https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
