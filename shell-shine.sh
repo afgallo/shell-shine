@@ -11,12 +11,12 @@ print_message() {
 
 print_message "Welcome to ShellShine! 🌟"
 
-# Ask user for a desired username
-read -p "Enter the desired username so we don't run as sudo (default: afgallo): " USERNAME
-USERNAME=${USERNAME:-afgallo}
-
 # 1. Create a new user if it doesn't exist (so we don't use sudo)
 if ! id "$USERNAME" &>/dev/null; then
+	# Ask user for a desired username
+	read -p "Enter the desired username so we don't run as sudo (default: afgallo): " USERNAME
+	USERNAME=${USERNAME:-afgallo}
+
 	print_message "User '$USERNAME' doesn't exist. Creating now..."
 	sudo adduser $USERNAME
 	sudo usermod -aG sudo $USERNAME
@@ -162,4 +162,4 @@ fi
 
 sudo timedatectl set-timezone Australia/NSW
 
-print_message "ShellShine setup complete! Enjoy! 🚀"
+print_message "ShellShine setup complete! Run source ~/.zshrc and enjoy! 🚀"

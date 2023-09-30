@@ -2,8 +2,6 @@
 
 set -e
 
-echo "Installing Sonokai theme..."
-
 # Step 1: Clone the repository
 git clone --depth 1 https://github.com/sainnhe/sonokai.git
 
@@ -11,25 +9,25 @@ git clone --depth 1 https://github.com/sainnhe/sonokai.git
 SONOKAI_PATH="$(pwd)/sonokai"
 
 # Check if .vim directory exists, if not, create it
-mkdir -p ~/.nvim/autoload ~/.nvim/colors ~/.nvim/doc
+mkdir -p ~/.nvim/autoload ~/.config/nvim/colors ~/.nvim/doc
 
 # Step 2: Copy autoload vim file
-cp "${SONOKAI_PATH}/autoload/sonokai.vim" ~/.nvim/autoload/
+cp "${SONOKAI_PATH}/autoload/sonokai.vim" ~/.config/nvim/autoload/
 
 # Step 3: Copy colors vim file
-cp "${SONOKAI_PATH}/colors/sonokai.vim" ~/.nvim/colors/
+cp "${SONOKAI_PATH}/colors/sonokai.vim" ~/.config/nvim/colors/
 
 # Step 4: Copy doc file and generate help tags
-cp "${SONOKAI_PATH}/doc/sonokai.txt" ~/.nvim/doc/
-vim -E -c "helptags ~/.nvim/doc/" -c "q"
+cp "${SONOKAI_PATH}/doc/sonokai.txt" ~/.config/nvim/doc/
+nvim -E -c "helptags ~/.config/nvim/doc/" -c "q"
 
 # Step 5: Install airline theme
 mkdir -p ~/.nvim/autoload/airline/themes
-cp "${SONOKAI_PATH}/autoload/airline/themes/sonokai.vim" ~/.nvim/autoload/airline/themes/
+cp "${SONOKAI_PATH}/autoload/airline/themes/sonokai.vim" ~/.config/nvim/autoload/airline/themes/
 
 # Step 6: Install lightline theme
 mkdir -p ~/.nvim/autoload/lightline/colorscheme
-cp "${SONOKAI_PATH}/autoload/lightline/colorscheme/sonokai.vim" ~/.nvim/autoload/lightline/colorscheme/
+cp "${SONOKAI_PATH}/autoload/lightline/colorscheme/sonokai.vim" ~/.config/nvim/autoload/lightline/colorscheme/
 
 # Step 7: Install lualine theme
 mkdir -p ~/.config/nvim/lua/lualine/themes
