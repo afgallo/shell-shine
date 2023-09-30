@@ -38,7 +38,7 @@ Follow the on-screen prompts and witness the magic unfold! 🪄✨
 
 ## Potential Issues 🚧
 
-Hey, even magic can run into hiccups! If you encounter an issue during the installation process, `ShellShine` will notify you about it so you can review if any changes were made to your environment.
+Hey, even magic can run into hiccups! Sometimes we may need to restart this script. Even though a lot of ❤️ was put into `SheelShine`, it has not been tested to the nth degree.
 
 ## Final Words 🌠
 

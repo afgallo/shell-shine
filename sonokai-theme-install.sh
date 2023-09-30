@@ -37,5 +37,3 @@ cp "${SONOKAI_PATH}/lua/lualine/themes/sonokai.lua" ~/.config/nvim/lua/lualine/t
 
 # Cleanup
 rm -rf sonokai
-
-echo "Sonokai theme installed successfully!"
