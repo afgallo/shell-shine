@@ -18,8 +18,7 @@ if ! id "$USERNAME" &>/dev/null; then
 	sudo chown $USERNAME:$USERNAME "/home/$USERNAME/shell-shine/shell-shine.sh"
 	sudo chmod +x "/home/$USERNAME/shell-shine/shell-shine.sh"
 
-	echo "Switching to user '$USERNAME'. Once you are the '$USERNAME' user, you can re-run this script to continue the setup."
-	su - $USERNAME
+	echo "Switch now to user '$USERNAME'. Once you are the '$USERNAME' user, you can re-run this script to continue the setup."
 	exit 0
 else
 	echo "User '$USERNAME' already exists. Continuing ..."
@@ -107,7 +106,6 @@ fi
 # Install Docker
 if ! command -v docker &>/dev/null; then
 	echo "Installing Docker from official repositories..."
-	chmod +x ./docker-install.sh
 	./docker-install.sh $USERNAME
 else
 	echo "Docker is already installed."
