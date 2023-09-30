@@ -8,8 +8,9 @@ DISCLAIMER: Only meant to be used with Ubuntu, run at your own risk!
 
 With `ShellShine`, you can:
 
-- Install essential terminal tools like brew, git, fzf, tree, etc.
-- Set up Oh My Zsh for a richer shell experience.
+- Install essential terminal tools like, git, fzf, tree, etc.
+- Set up zsh and Oh My Zsh for a richer shell experience.
+- Install PowerLevel10k 🌟
 - And a sprinkle of magical plugins to boost your terminal productivity!
 
 All with a single, sparkling script.

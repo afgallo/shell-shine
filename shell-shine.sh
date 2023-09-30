@@ -24,9 +24,9 @@ else
 	echo "User '$USERNAME' already exists. Continuing ..."
 fi
 
-# 2. Update and upgrade the system
+# 2. Update and upgrade the system and install essentials
 sudo apt update && sudo apt upgrade -y
-sudo apt-get install build-essential unzip python3 python3-pip ruby-full -y
+sudo apt-get install build-essential unzip python3 python3-pip ruby-full fzf tree -y
 
 # 3. Install and configure packages
 
