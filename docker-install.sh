@@ -30,7 +30,7 @@ echo \
 sudo apt-get update
 
 # Install Docker
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
 
 # Add the user to the docker group to avoid using 'sudo' with Docker commands
 if [ -z "$(getent group docker)" ]; then
