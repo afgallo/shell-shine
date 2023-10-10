@@ -78,7 +78,7 @@ fi
 # Install Docker
 if ! command -v docker &>/dev/null; then
 	print_message "Installing Docker from official repositories..."
-	./docker-install.sh $USERNAME
+	./docker-install.sh
 else
 	print_message "Docker is already installed."
 fi

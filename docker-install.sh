@@ -1,19 +1,12 @@
 #!/bin/bash
 set -e
 
-# Check if a username was passed in
-if [ -z "$1" ]; then
-	echo "Error: Please provide a username as an argument."
-	exit 1
-fi
-
 # Remove any previous Docker versions or related packages
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do
 	sudo apt-get remove -y $pkg
 done
 
 # Update and install required packages
-sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg
 
 # Set up Docker's official GPG key
@@ -27,8 +20,6 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
 	sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 
-sudo apt-get update
-
 # Install Docker
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
 
@@ -37,6 +28,6 @@ if [ -z "$(getent group docker)" ]; then
 	sudo groupadd docker
 fi
 
-sudo usermod -aG docker $USERNAME
+sudo usermod -aG docker "$(whoami)"
 
 echo "To avoid using 'sudo' with Docker commands, either log out and log back in or execute the 'newgrp docker' command."
